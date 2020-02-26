@@ -7,15 +7,15 @@ import Notes from './Notes';
 const Board = ({ class_name, title, notes, eventHandler }) => (
     <Col xs={ 12 } sm={ 6 } md={ 3 } className={ class_name }>
         <h3>{ title }</h3>
-        <Container maxWidth="sm">
-            {
-                <Notes
-                    class_name={ class_name }
-                    notes={ notes }
-                    eventHandler={ eventHandler }
-                />
-            }
-        </Container>
+            <Container maxWidth="sm">
+                {
+                    <Notes
+                        class_name={ class_name }
+                        notes={ notes }
+                        eventHandler={ eventHandler }
+                    />
+                }
+            </Container>
     </Col>
 );
 
