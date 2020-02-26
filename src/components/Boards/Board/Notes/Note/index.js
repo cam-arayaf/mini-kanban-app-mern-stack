@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import { Card, CardActions, CardContent, IconButton, TextField } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
@@ -14,34 +12,20 @@ const IconBtn = ({ onMouseDown, icon }) => (
     </IconButton>
 );
 
-const AddIdea = ({ eventHandler }) => (
-    <Col xs={ 12 }>
-        <IconBtn onMouseDown={ () => eventHandler('clickAddIcon') } icon={ <AddIcon /> } />
-    </Col>
-);
-
 const IdeaAndDoneNote = ({ _id, type, eventHandler }) => (
     <Fragment>
-        <Col xs={ 4 }>
+        <Col xs={ 6 }>
             <IconBtn
-                onMouseDown={ type === 'ideas' ? () => eventHandler('clickSaveIcon', _id) :
-                    () => eventHandler('clickSkipPreviousIcon', _id)
+                onMouseDown={ type === 'ideas' ? () => eventHandler('remove', _id) :
+                    () => eventHandler('previous', _id)
                 }
-                icon={ type === 'ideas' ? <SaveIcon /> : <SkipPreviousIcon /> }
+                icon={ type === 'ideas' ? <DeleteIcon /> : <SkipPreviousIcon /> }
             />
         </Col>
-        <Col xs={ 4 }>
+        <Col xs={ 6 }>
             <IconBtn
-                onMouseDown={ type === 'ideas' ? () => eventHandler('clickDeleteIcon', _id) :
-                    () => eventHandler('clickSaveIcon', _id)
-                }
-                icon={ type === 'ideas' ? <DeleteIcon /> : <SaveIcon /> }
-            />
-        </Col>
-        <Col xs={ 4 }>
-            <IconBtn
-                onMouseDown={ type === 'ideas' ? () => eventHandler('clickSkipNextIcon', _id) :
-                    () => eventHandler('clickDeleteIcon', _id)
+                onMouseDown={ type === 'ideas' ? () => eventHandler('next', _id) :
+                    () => eventHandler('remove', _id)
                 }
                 icon={ type === 'ideas' ? <SkipNextIcon /> : <DeleteIcon /> }
             />
@@ -51,27 +35,21 @@ const IdeaAndDoneNote = ({ _id, type, eventHandler }) => (
 
 const ToDoAndInProgressNote = ({ _id, eventHandler }) => (
     <Fragment>
-        <Col xs={ 6 } sm={ 3 }>
+        <Col xs={ 4 }>
             <IconBtn
-                onMouseDown={ () => eventHandler('clickSkipPreviousIcon', _id) }
+                onMouseDown={ () => eventHandler('previous', _id) }
                 icon={ <SkipPreviousIcon /> }
             />
         </Col>
-        <Col xs={ 6 } sm={ 3 }>
+        <Col xs={ 4 }>
             <IconBtn
-                onMouseDown={ () => eventHandler('clickSaveIcon', _id) }
-                icon={ <SaveIcon /> }
-            />
-        </Col>
-        <Col xs={ 6 } sm={ 3 }>
-            <IconBtn
-                onMouseDown={ () => eventHandler('clickDeleteIcon', _id) }
+                onMouseDown={ () => eventHandler('remove', _id) }
                 icon={ <DeleteIcon /> }
             />
         </Col>
-        <Col xs={ 6 } sm={ 3 }>
+        <Col xs={ 4 }>
             <IconBtn
-                onMouseDown={ () => eventHandler('clickSkipNextIcon', _id) }
+                onMouseDown={ () => eventHandler('next', _id) }
                 icon={ <SkipNextIcon /> }
             />
         </Col>
@@ -93,15 +71,14 @@ const Note = ({ _id, type, text, eventHandler }) => (
                 rowsMax="4"
                 variant="outlined"
                 defaultValue={ text }
+                onBlur={ () => eventHandler(_id ? 'save' : 'add', _id) }
             />
         </CardContent>
         <CardActions>
             <Grid>
                 <Row>
                     {
-                        _id ?
-                            <Buttons _id={ _id } type={ type } eventHandler={ eventHandler } /> :
-                            <AddIdea eventHandler={ eventHandler } />
+                        _id && <Buttons _id={ _id } type={ type } eventHandler={ eventHandler } />
                     }
                 </Row>
             </Grid>
@@ -112,10 +89,6 @@ const Note = ({ _id, type, text, eventHandler }) => (
 IconBtn.propTypes = {
     onMouseDown: PropTypes.func.isRequired,
     icon: PropTypes.element.isRequired
-}
-
-AddIdea.propTypes = {
-    eventHandler: PropTypes.func.isRequired
 }
 
 IdeaAndDoneNote.propTypes = {

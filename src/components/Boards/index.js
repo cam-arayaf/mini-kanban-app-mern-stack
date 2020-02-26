@@ -33,26 +33,11 @@ class Boards extends Component {
         .then(() => this.getNotes())
         .catch(error => console.log(error));
     
-    putSkipNote = (_id, skip) => axios.put(`${ api_url }/notes/${ skip }/${ _id }`)
+    putPreviousNextNote = (_id, event) => axios.put(`${ api_url }/notes/${ event }/${ _id }`)
         .then(() => this.getNotes())
         .catch(error => console.log(error));
 
-    eventHandler = (event, _id) => {
-        switch (event) {
-            case 'clickAddIcon':
-                return this.clickAddIcon();
-            case 'clickDeleteIcon':
-                return this.clickDeleteIcon(_id);
-            case 'clickSkipPreviousIcon': case 'clickSkipNextIcon':
-                return this.clickSkipPreviousNextIcon(event, _id);
-            case 'clickSaveIcon':
-                return this.clickSaveIcon(_id);
-            default:
-                return;
-        }
-    }
-
-    clickAddIcon = () => {
+    addNote = () => {
         const textField0 = document.querySelector('#textFieldAdd');
         const text = textField0.value.trim();
         if (!text) return textField0.value = '';
@@ -60,18 +45,28 @@ class Boards extends Component {
         this.postNote(text);
     }
 
-    clickDeleteIcon = _id => this.deleteNote(_id);
-
-    clickSkipPreviousNextIcon = (event, _id) => {
-        const skip = event === 'clickSkipPreviousIcon' ? 'previous' : 'next';
-        this.putSkipNote(_id, skip);
-    }
-
-    clickSaveIcon = _id => {
+    saveNote = _id => {
         const textField = document.querySelector(`#textField${ _id }`);
         const text = textField.value.trim();
-        if (!text) return textField.value = '';
+        const previousText = this.state.notes.find(note => note._id === _id).text;
+        if (!text || previousText === text) return textField.value = previousText;
+        textField.value = text;
         this.putTextNote(_id, text);
+    }
+
+    eventHandler = (event, _id) => {
+        switch (event) {
+            case 'add':
+                return this.addNote();
+            case 'remove':
+                return this.deleteNote(_id);
+            case 'previous': case 'next':
+                return this.putPreviousNextNote(_id, event);
+            case 'save':
+                return this.saveNote(_id);
+            default:
+                return;
+        }
     }
 
     render() {
