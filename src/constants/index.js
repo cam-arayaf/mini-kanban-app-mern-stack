@@ -1,1 +1,1 @@
-export const api_url = 'https://us-central1-mini-kanban-app-efa59.cloudfunctions.net/createApi';
+export const api_url = 'https://us-central1-mini-kanban-app-efa59.cloudfunctions.net/api';

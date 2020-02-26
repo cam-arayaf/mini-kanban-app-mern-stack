@@ -25,7 +25,7 @@ const customError = resp => resp.status(400).json({ ok: false, error: { message:
 const emptyText = resp => resp.status(400).json({ ok: false, error: { message: 'Text is required' } });
 const defaultResp = (resp, { _id, type, text }) => resp.json({ ok: true, note: { _id, type, text } });
 
-const createApi = () => {
+const api = () => {
     const app = express();
     
     app.use(bodyParser.urlencoded({ extended: false }));
@@ -125,4 +125,4 @@ const createApi = () => {
     return app;
 }
 
-exports.createApi = functions.https.onRequest(createApi());
+exports.api = functions.https.onRequest(api());
